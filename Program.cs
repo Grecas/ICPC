@@ -7,9 +7,11 @@ namespace TrafficBr
     {
         static void Main(string[] args)
         {
-            List<Semaphore> s = new List<Semaphore>() { new Semaphore { X = 4, R = 3, G = 5}, new Semaphore { X = 10, R = 3, G = 5}, new Semaphore { X = 2, R=1, G = 3} };
+            List<Semaphore> s = new List<Semaphore>() { new Semaphore { X = 1, R = 2, G = 3 }, new Semaphore { X = 6, R = 2, G = 3 }, new Semaphore { X = 10, R = 2, G = 3 }, new Semaphore { X = 16, R = 3, G = 4 } };
 
-            Console.WriteLine("16,12 " + MCM(new List<int> { 16, 12,2,4,60 }));
+            List<float> a = pBeTheFirst(s);
+            foreach( float fl in a)
+             Console.WriteLine("Semaphore: " + fl+ "/n");
 
             Console.Read();
         }
@@ -23,7 +25,7 @@ namespace TrafficBr
         static int firstRed(int time, List<Semaphore> s) 
         {
             int tic = time;
-            int countSem = 1;
+            int countSem = 0;
             foreach(Semaphore sem in s)
             {
                 tic = time + sem.X;
@@ -35,57 +37,30 @@ namespace TrafficBr
             return 0;
         }
 
-        /// <summary>
-        /// Caclula el MCM de una lista de numeros
-        /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
-        static int MCM(List<int> nums) 
+        static List<float> pBeTheFirst(List<Semaphore> s) 
         {
-            if (nums.Count == 0) throw new Exception("Debe ingresar al menos 2 numeros");
-            int mcm = nums[0];
-            for(int n = 0; n < nums.Count-1; n++) 
+            int[] counter = new int[(s.Count)];
+            List<float> p = new List<float>();
+            int timer = 0;
+
+            List<int> ciclos = new List<int>();
+            foreach (Semaphore sem in s)
             {
-                mcm = MCM(mcm, nums[n + 1]);
+                ciclos.Add(sem.G + sem.R);
             }
-            return mcm;
-        }
-
-        /// <summary>
-        /// Calcula el mcm de dos numeros
-        /// </summary>
-        /// <param name="n1"></param>
-        /// <param name="n2"></param>
-        /// <returns></returns>
-        static int MCM(int n1, int n2) 
-        {
-            int min = Math.Min(n1, n2);
-            int max = Math.Max(n1, n2);
-
-            return (max/MCD(n1,n2))*min;
-        }
-
-        /// <summary>
-        /// Calcula el maximo comun divisor de dos numeros
-        /// </summary>
-        /// <param name="n1"></param>
-        /// <param name="n2"></param>
-        /// <returns></returns>
-        private static int MCD(int n1, int n2)
-        {
-            int mcd;
-            int min = Math.Min(n1, n2);
-            int max = Math.Max(n1, n2);
-            do
+            int totalTime = MathHelper.MCM(ciclos);
+            while(timer < totalTime)
             {
-                mcd = min;
-                min = max % min;
-                max = mcd;
-            } while (min != 0);
-
-            return mcd;
+               counter[ firstRed(timer, s)] ++;
+                timer++;
+            }
+            foreach (int i in counter)
+            {
+                p.Add( (float)i / (float)totalTime);
+            }
+            return p;
         }
-
+       
     }
 
     /// <summary>
@@ -115,5 +90,60 @@ namespace TrafficBr
         {
             return (time) % (g + r) < r;
         }
+    }
+
+     internal static class MathHelper 
+    {
+        /// <summary>
+        /// Caclula el MCM de una lista de numeros
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        internal static int MCM(List<int> nums)
+        {
+            if (nums.Count == 0) throw new Exception("Debe ingresar al menos 2 numeros");
+            int mcm = nums[0];
+            for (int n = 0; n < nums.Count - 1; n++)
+            {
+                mcm = MCM(mcm, nums[n + 1]);
+            }
+            return mcm;
+        }
+
+        /// <summary>
+        /// Calcula el mcm de dos numeros
+        /// </summary>
+        /// <param name="n1"></param>
+        /// <param name="n2"></param>
+        /// <returns></returns>
+        internal static int MCM(int n1, int n2)
+        {
+            int min = Math.Min(n1, n2);
+            int max = Math.Max(n1, n2);
+
+            return (max / MCD(n1, n2)) * min;
+        }
+
+        /// <summary>
+        /// Calcula el maximo comun divisor de dos numeros
+        /// </summary>
+        /// <param name="n1"></param>
+        /// <param name="n2"></param>
+        /// <returns></returns>
+        internal static int MCD(int n1, int n2)
+        {
+            int mcd;
+            int min = Math.Min(n1, n2);
+            int max = Math.Max(n1, n2);
+            do
+            {
+                mcd = min;
+                min = max % min;
+                max = mcd;
+            } while (min != 0);
+
+            return mcd;
+        }
+
     }
 }
