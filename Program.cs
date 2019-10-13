@@ -1,36 +1,81 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TrafficBr
 {
-    class Program
+    class TrafficBlights
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("0 " + isRed(0, 3, 5));
-            Console.WriteLine("1 " + isRed(1, 3, 5));
-            Console.WriteLine("2 " + isRed(2, 3, 5));
-            Console.WriteLine("3 " + isRed(3, 3, 5));
-            Console.WriteLine("4 " + isRed(4, 3, 5));
-            Console.WriteLine("5 " + isRed(5, 3, 5));
-            Console.WriteLine("6 " + isRed(6, 3, 5));
-            Console.WriteLine("7 " + isRed(7, 3, 5));
-            Console.WriteLine("8 " + isRed(8, 3, 5));
-            Console.WriteLine("9 " + isRed(9, 3, 5));
-            Console.WriteLine("10 " + isRed(10, 3, 5));
-            Console.WriteLine("11 " + isRed(11, 3, 5));
-            Console.WriteLine("12 " + isRed(12, 3, 5));
-            Console.WriteLine("13 " + isRed(13, 3, 5));
-            Console.WriteLine("14 " + isRed(14, 3, 5));
-            Console.WriteLine("15 " + isRed(15, 3, 5));
-            Console.WriteLine("16 " + isRed(16, 3, 5));
-            Console.WriteLine("17 " + isRed(17, 3, 5));
-            Console.WriteLine("18 " + isRed(18, 3, 5));
+            List<Semaphore> s = new List<Semaphore>() { new Semaphore { X = 4, R = 3, G = 5}, new Semaphore { X = 10, R = 3, G = 5}, new Semaphore { X = 2, R=1, G = 3} };
+
+            Console.WriteLine("16,12 " + MCM(16, 12));
+
             Console.Read();
         }
+       
 
-        static bool isRed(int time, int red, int green)
+        static int firstRed(int time, List<Semaphore> s) 
         {
-            return (time) % (green + red) < red;
+            int tic = time;
+            int countSem = 1;
+            foreach(Semaphore sem in s)
+            {
+                tic = time + sem.X;
+                if (sem.isRed(tic))
+                    return countSem;
+                countSem++;
+            }
+
+            return 0;
+        }
+
+        static int MCM(int n1, int n2) 
+        {
+            int min = Math.Min(n1, n2);
+            int max = Math.Max(n1, n2);
+
+            return (max/MCD(n1,n2))*min;
+        }
+
+        private static int MCD(int n1, int n2)
+        {
+            int mcd;
+            int min = Math.Min(n1, n2);
+            int max = Math.Max(n1, n2);
+            do
+            {
+                mcd = min;
+                min = max % min;
+                max = mcd;
+            } while (min != 0);
+
+            return mcd;
+        }
+    }
+
+    /// <summary>
+    /// Class Semaphore. 
+    /// Los objetos semaphore tienen un intervalo de duracion para su luz roja(r) y otro para su luz verde(g) y se encuentran a una distancia(x) del punto inicial de una calle
+    /// </summary>
+    internal class Semaphore
+    {
+        private int x;
+        private int g;
+        private int r;
+
+        public int R { get => r; set => r = value; }
+        public int X { get => x; set => x = value; }
+        public int G { get => g; set => g = value; }
+
+        /// <summary>
+        /// Devuelve si dato un tiempo en seg. el semaphore se encuentra en rojo o verde
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        internal bool isRed(int time)
+        {
+            return (time) % (g + r) < r;
         }
     }
 }
