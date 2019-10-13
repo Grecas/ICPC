@@ -5,15 +5,39 @@ namespace TrafficBr
 {
     class TrafficBlights
     {
+        static int allGreen = 0;
+        static int totalTime = 0;
         static void Main(string[] args)
         {
-            List<Semaphore> s = new List<Semaphore>() { new Semaphore { X = 1, R = 2, G = 3 }, new Semaphore { X = 6, R = 2, G = 3 }, new Semaphore { X = 10, R = 2, G = 3 }, new Semaphore { X = 16, R = 3, G = 4 } };
+            List<Semaphore> s = new List<Semaphore>()
+            {
+                new Semaphore { X = 1, R = 2, G = 3 },
+                new Semaphore { X = 6, R = 2, G = 3 },
+                new Semaphore { X = 10, R = 2, G = 3 },
+                new Semaphore { X = 16, R = 3, G = 4 }
+            };
+            //List<Semaphore> s = new List<Semaphore>() 
+            //{ 
+            //    new Semaphore { X = 4, R =1, G = 5 }, 
+            //    new Semaphore { X = 9, R = 8, G = 7 }, 
+            //    new Semaphore { X = 13, R = 3, G = 5 }, 
+            //    new Semaphore { X = 21, R = 5, G = 7 } ,
+            //    new Semaphore { X = 30, R = 9, G = 1 } ,
+            //    new Semaphore { X = 2019, R = 20, G = 0 } 
+            //};
 
             List<float> a = pBeTheFirst(s);
-            foreach( float fl in a)
-             Console.WriteLine("Semaphore: " + fl+ "/n");
+            foreach (float fl in a)
+                Console.WriteLine("Semaphore: " + fl);
+            var pGreen = pAllInGreen();
+            Console.WriteLine("All in Green: " + pGreen);
 
             Console.Read();
+        }
+
+        static float pAllInGreen() 
+        {
+            return (float)allGreen/(float)totalTime; 
         }
        
         /// <summary>
@@ -33,7 +57,7 @@ namespace TrafficBr
                     return countSem;
                 countSem++;
             }
-
+            allGreen++;    
             return 0;
         }
 
@@ -48,16 +72,18 @@ namespace TrafficBr
             {
                 ciclos.Add(sem.G + sem.R);
             }
-            int totalTime = MathHelper.MCM(ciclos);
+            totalTime = MathHelper.MCM(ciclos);
             while(timer < totalTime)
             {
                counter[ firstRed(timer, s)] ++;
                 timer++;
             }
+            counter[0] = counter[0] - allGreen;
             foreach (int i in counter)
             {
                 p.Add( (float)i / (float)totalTime);
             }
+           
             return p;
         }
        
