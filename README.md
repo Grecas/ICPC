@@ -9,7 +9,8 @@ Se tiene una calle: MainStreet en la cual se han dispuesto `n` semáforos que ca
 
 # Solución implementada
 
-Lo primero que se observa es que el ciclo de repetición de cada semáforo es `c = (r+v)` y el ciclo de repetición de todos los semáforos de la calle es `C=mcm(c1,c2,...cn)`. La solución implementada comprueba en qué estado aparece cada semáforo al llegar el auto si este parte en un `0<=t<=C-1`. La probabilidad de que un semáforo esté en rojo en el seg (t) es el número de veces que está en rojo al llegar el auto dividido por C y la probabilidad de que el auto pase en verde es el número de veces que el auto pasa todos los semáforos con verde dividido por C. Esta solución sin embargo, tiene la desventaja que depende del MCM lo que implica que, para intervalos de r o g grande no es factible de calcular. 
+Lo primero que se observa es que el ciclo de repetición de cada semáforo es `c = (r+v)` y el ciclo de repetición de todos los semáforos de la calle es `C=mcm(c1,c2,...cn)`. La solución implementada comprueba en qué estado aparece cada semáforo al llegar el auto si este parte en un `0<=t<=C-1`. La probabilidad de que un semáforo esté en rojo en el seg (t) es el número de veces que está en rojo al llegar el auto dividido por C y la probabilidad de que el auto pase en verde es el número de veces que el auto pasa todos los semáforos con verde dividido por C. Esta solución sin embargo, tiene la desventaja que depende del MCM de todos los ciclos, que puede ser un número muy grande.
+El link que describe la solución está [aquí](http://www.csc.kth.se/~austrin/icpc/finals2019solutions.pdf)
 
 La solution sketch propuesta en la página de la ACM-ICPC fue revisada y la entendí pero no la alcancé a implementar. La puedo explicar más adelante...
 
