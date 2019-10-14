@@ -14,11 +14,11 @@ namespace TrafficBr
         }
 
         /// <summary>
-        /// Calcula primero semaforo que se encuentra en rojo si partiendo un auto en la posicion cero en un moemnto dado
+        /// Calcula el primer semáforo que se encuentra en rojo, si partiendo un auto en la posición cero en un momento dado
         /// </summary>
-        /// <param name="time">Segundo en el que inicia su reccorido el auto</param>
-        /// <param name="s">Lista de semaforos que se encuentran en la MainStreet</param>
-        /// <returns>Devuelve el tiempo numero del primer semaforo qu eencuentra en ropjo el auto. Si avanza por toda la calle con los semaforos en verde devuelve 0</returns>
+        /// <param name="time">Segundo en el que inicia su recorrido el auto</param>
+        /// <param name="s">Lista de semáforos que se encuentran en la MainStreet</param>
+        /// <returns>Devuelve el número del primer semáforo que el auto encuentra en rojo . Si avanza por toda la calle con los semáforos en verde devuelve 0</returns>
         static internal int firstRed(int time, List<Semaphore> s)
         {
             int tic = time;
@@ -33,7 +33,13 @@ namespace TrafficBr
             allGreen++;
             return 0;
         }
-
+        
+        /// <summary>
+        /// Calcula la probabilidad que tiene cada semáforo de ser el primero que el auto encuentra en rojo.
+        /// </summary>
+        /// <param name="time">Segundo en el que inicia su recorrido el auto</param>
+        /// <param name="s">Lista de semáforos que se encuentran en la MainStreet</param>
+        /// <returns>Devuelve el número del primer semáforo que el auto encuentra en rojo . Si avanza por toda la calle con los semáforos en verde devuelve 0</returns>
         static internal List<float> pBeTheFirst(List<Semaphore> s)
         {
             int[] counter = new int[(s.Count)];
@@ -51,6 +57,7 @@ namespace TrafficBr
                 counter[firstRed(timer, s)]++;
                 timer++;
             }
+            //La cantidad de veces que todos los autos están en verde se va guardando en el contador del primer semáforo, aquí se saca
             counter[0] = counter[0] - allGreen;
             foreach (int i in counter)
             {
